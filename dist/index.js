@@ -1,8 +1,6 @@
 import inquirer from "inquirer";
 import { pool, connectDB } from "./connections.js";
-
 await connectDB();
-
 async function App() {
     try {
         const { action } = await inquirer.prompt([
@@ -29,7 +27,6 @@ async function App() {
                 ]
             }
         ]);
-
         switch (action) {
             case 'View all employees':
                 await viewEmployees();
@@ -77,18 +74,16 @@ async function App() {
                 console.log('Goodbye!');
                 await pool.end();
                 return;
-
         }
-
         App();
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error running the application: ', error);
         App();
     }
 }
-
 async function viewDepartments() {
-    try{
+    try {
         const departments = await pool.query('SELECT * FROM department');
         console.table(departments.rows);
     }
@@ -96,9 +91,8 @@ async function viewDepartments() {
         console.error('Error viewing departments: ', error);
     }
 }
-
 async function viewRoles() {
-    try{
+    try {
         const roles = await pool.query('SELECT * FROM role');
         console.table(roles.rows);
     }
@@ -106,9 +100,8 @@ async function viewRoles() {
         console.error('Error viewing roles: ', error);
     }
 }
-
 async function viewEmployees() {
-    try{
+    try {
         const employees = await pool.query(`
             SELECT 
                 e.id,
@@ -132,7 +125,6 @@ async function viewEmployees() {
         console.error('Error viewing employees: ', error);
     }
 }
-
 async function addDepartment() {
     try {
         const department = await inquirer.prompt([
@@ -142,14 +134,13 @@ async function addDepartment() {
                 message: 'Enter the department name:'
             }
         ]);
-
         await pool.query('INSERT INTO department (name) VALUES ($1)', [department.name]);
         console.log('Department added successfully!');
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error adding department: ', error);
     }
 }
-
 async function addRole() {
     try {
         const { name, salary, department_id } = await inquirer.prompt([
@@ -176,7 +167,6 @@ async function addRole() {
         console.error('Error adding role: ', error);
     }
 }
-
 async function addEmployee() {
     try {
         const { first_name, last_name, role_id, manager_id } = await inquirer.prompt([
@@ -208,7 +198,6 @@ async function addEmployee() {
         console.error('Error adding employee: ', error);
     }
 }
-
 async function updateEmployeeRole() {
     try {
         const { employee_id, role_id } = await inquirer.prompt([
@@ -230,7 +219,6 @@ async function updateEmployeeRole() {
         console.error('Error updating employee role: ', error);
     }
 }
-
 async function updateEmployeeManager() {
     try {
         const { employee_id, manager_id } = await inquirer.prompt([
@@ -252,7 +240,6 @@ async function updateEmployeeManager() {
         console.error('Error updating employee manager: ', error);
     }
 }
-
 async function viewEmployeesByManager() {
     try {
         const { manager_id } = await inquirer.prompt([
@@ -286,7 +273,6 @@ async function viewEmployeesByManager() {
         console.error('Error viewing employees by manager: ', error);
     }
 }
-
 async function viewEmployeesByDepartment() {
     try {
         const { department_id } = await inquirer.prompt([
@@ -320,7 +306,6 @@ async function viewEmployeesByDepartment() {
         console.error('Error viewing employees by department: ', error);
     }
 }
-
 async function deleteEmployee() {
     try {
         const { employee_id } = await inquirer.prompt([
@@ -337,7 +322,6 @@ async function deleteEmployee() {
         console.error('Error deleting employee: ', error);
     }
 }
-
 async function deleteDepartment() {
     try {
         const { department_id } = await inquirer.prompt([
@@ -354,7 +338,6 @@ async function deleteDepartment() {
         console.error('Error deleting department: ', error);
     }
 }
-
 async function deleteRole() {
     try {
         const { role_id } = await inquirer.prompt([
@@ -371,7 +354,6 @@ async function deleteRole() {
         console.error('Error deleting role: ', error);
     }
 }
-
 async function viewBudget() {
     try {
         const { department_id } = await inquirer.prompt([
@@ -395,5 +377,4 @@ async function viewBudget() {
         console.error('Error viewing budget: ', error);
     }
 }
-
 App();
