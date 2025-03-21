@@ -179,7 +179,7 @@ async function addRole() {
 
 async function addEmployee() {
     try {
-        const { first_name, last_name, role_id, manager_id } = await inquirer.prompt([
+        let { first_name, last_name, role_id, manager_id } = await inquirer.prompt([
             {
                 type: 'input',
                 name: 'first_name',
@@ -201,6 +201,10 @@ async function addEmployee() {
                 message: 'Enter the manager id:'
             }
         ]);
+        if (!manager_id) {
+            manager_id = null;
+        }
+
         await pool.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)', [first_name, last_name, role_id, manager_id]);
         console.log('Employee added successfully!');
     }
